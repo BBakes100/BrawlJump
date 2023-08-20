@@ -13,13 +13,17 @@ public class PlayerController : MonoBehaviour
     private float jump;
 
 
-    private float speed = 10;
-    private float jumpSpeed = 20;
+    public float speed;
+    public float jumpSpeed;
     public Vector2 boxSize;
-    public float castDistance;
+    public float bottomCastDistance;
     public LayerMask groundLayer;
+    public Vector2 sideBoxSize;
+    public float sideCastDistance;
+    private float forceOffWall = 500f;
 
     private bool canJump;
+    private bool onWall;
     
     void Awake()
     {
@@ -35,23 +39,16 @@ public class PlayerController : MonoBehaviour
     private void movePlayer(){
 
         canJump = isGrounded() ? true : false;
+        onWall = isOnWall() ? true : false;
 
-        // Player Jumps
+        // Player On Ground and Can Jump
         if(canJump && jump != 0)
         {
             rb.AddForce(Vector2.up * jumpSpeed, ForceMode2D.Impulse);
         } 
-        // Player is Grounded
-        else 
-        {
-            rb.velocity = new Vector2(move.x * speed, rb.velocity.y);
-            
-            // TODO KEEP WORKING ON WALL SLIDING
-            if(move.x == 1 && rb.velocity.x == 1){
-                Debug.Log("on RIght wall");
-                // rb.velocity = new Vector2(-rb.velocity.x, rb.velocity.y);
-            }
-        }
+
+        // Player Moves
+        rb.velocity = new Vector2(move.x * speed, rb.velocity.y);
     }
 
     public void OnMove(InputAction.CallbackContext context){
@@ -62,8 +59,30 @@ public class PlayerController : MonoBehaviour
         jump = context.ReadValue<float>();
     }
 
+    public bool isOnWall(){
+
+        if(Physics2D.BoxCast(transform.position, sideBoxSize, 0, transform.right, sideCastDistance, groundLayer))
+        {
+            // Wall sliding mechanic
+            rb.AddForce(new Vector2(-forceOffWall, 0));
+            // rb.velocity = new Vector2(rb.velocity.x, -30);
+            // rb.gravityScale = 5;
+            return true;
+        } 
+
+         else if(Physics2D.BoxCast(transform.position, sideBoxSize, 0, -transform.right, sideCastDistance, groundLayer))
+        {
+            rb.AddForce(new Vector2(forceOffWall, 0));
+            return true;
+        } 
+        else 
+        {
+            return false;
+        }
+    }
+
     public bool isGrounded(){
-        if(Physics2D.BoxCast(transform.position, boxSize, 0, -transform.up, castDistance, groundLayer))
+        if(Physics2D.BoxCast(transform.position, boxSize, 0, -transform.up, bottomCastDistance, groundLayer))
         {
             return true;
         } 
@@ -77,7 +96,9 @@ public class PlayerController : MonoBehaviour
         Helps to Check the ground condition for player
     */
     private void OnDrawGizmos(){
-        Gizmos.DrawWireCube(transform.position - transform.up * castDistance, boxSize);
+        Gizmos.DrawWireCube(transform.position - transform.up * bottomCastDistance, boxSize);
+        Gizmos.DrawWireCube(transform.position + transform.right * sideCastDistance, sideBoxSize);
+        Gizmos.DrawWireCube(transform.position - transform.right * sideCastDistance, sideBoxSize);
     }
 
 }

@@ -234,8 +234,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93aaf22d6da464847a15569aff8977ff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  speed: 10
+  jumpSpeed: 25
   boxSize: {x: 0.5, y: 0.5}
-  castDistance: 0.3
+  bottomCastDistance: 0.3
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
+  sideBoxSize: {x: 0.1, y: 1}
+  sideCastDistance: 0.55
+  forceOffWall: 400

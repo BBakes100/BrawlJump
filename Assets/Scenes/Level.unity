@@ -192,6 +192,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4403920530903073479, guid: 4a80f6a879c96a64ea5e77e52a3e9523, type: 3}
+      propertyPath: m_GravityScale
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6489929492308448494, guid: 4a80f6a879c96a64ea5e77e52a3e9523, type: 3}
+      propertyPath: castDistance
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6489929492308448494, guid: 4a80f6a879c96a64ea5e77e52a3e9523, type: 3}
+      propertyPath: forceOffWall
+      value: 5000
+      objectReference: {fileID: 0}
     - target: {fileID: 8828626868425266100, guid: 4a80f6a879c96a64ea5e77e52a3e9523, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
